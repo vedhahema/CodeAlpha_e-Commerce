@@ -1,0 +1,50 @@
+{% extends "shop/layout/main.html" %}
+
+{% block title %}
+register
+{% endblock title %}
+
+{% block content %}
+<div class="container-fluid" style="margin-top:70px;min-height:600px;">
+  <div class="row">
+    <div class="col-12">
+    <h2 class="mb-3">Register page</h2>
+    <hr style="border-color:#b8bfc2;">
+    {% include 'shop/inc/message.html' %}
+  </div>
+  <section class="py-4 my-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-6 ">
+          <form method="post" action="#">
+            {% csrf_token %}
+            <div class="mb-4">
+               <label for="" class="form-label">User name</label>
+            {{ forms.username}}
+            <label class="text-danger">{{form.errors.username}}</label>
+            </div>
+            <div class="mb-4">
+                <label for="" class="form-label">email</label>
+            {{ forms.email }}
+            </div>
+            <div class="mb-4">
+                <label for="" class="form-label">password</label>
+            {{ forms.password1 }}
+            <label class="text-danger">{{form.errors.password1}}</label>
+            </div>
+            <div class="mb-4">
+                <label for="" class="form-label">confirm password</label>
+            {{ forms.password2 }}
+            <label class="text-danger">{{form.errors.password2}}</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </form>
+          <p class="my-2">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+          
+        </div>
+        
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock content %}

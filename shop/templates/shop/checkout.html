@@ -1,0 +1,59 @@
+{% extends 'shop/layout/main.html' %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<section class="bg-light py-5">
+  <div class="container">
+    <h4>Checkout</h4>
+    <hr>
+    <form method="post" action="{% url 'place_order' %}">
+      {% csrf_token %}
+      <input type="hidden" name="product_id" value="{{ product.id }}">
+      <input type="hidden" name="qty" value="{{ qty }}">
+      <input type="hidden" name="total_price" value="{{ total }}">
+      
+      <div class="mb-3">
+        <label for="fullname" class="form-label">Full Name</label>
+        <input type="text" name="fullname" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+        <textarea name="address" class="form-control" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="text" name="phone" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <h5>Pay with PayPal</h5>
+        <div id="paypal-button-container"></div>
+      </div>
+
+      <div class="text-end mt-3">
+        <button class="btn btn-success" type="submit">Place Order</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script src="https://www.paypal.com/sdk/js?client-id=AciNdRYFV8dqnURPfkrbBwLUSqG8JFlM2IKOwWFm97QaIetfX8sA-icxHcVPzcvtrGvG2BAh-vJSFMvm"></script>
+<script>
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '{{ total }}'
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert('Transaction completed by ' + details.payer.name.given_name);
+        document.querySelector('form').submit();
+      });
+    }
+  }).render('#paypal-button-container');
+</script>
+{% endblock %}
